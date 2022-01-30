@@ -604,3 +604,23 @@ deleteEmployee = () => {
     });
   });
 };
+
+//function displays budget by department
+
+viewBudget = () => {
+    console.log('Showing budget by department...\n');
+
+    const sql = `SELECT department_id AS id,
+                        department.name AS department,
+                        SUM(salary) AS budget
+                        
+                FROM role
+                JOIN department ON role.department_id = department.id GROUP BY department_id`;
+
+    connection.promise().query(sql, (err, rows) => {
+        if (err) throw err;
+        console.table(rows);
+
+        beginPrompt();
+    });
+};
