@@ -417,82 +417,80 @@ updateEmployee = () => {
   });
 };
 
-
 //function updates manager
 
 updateManager = () => {
+  //retrieves all employees from the employee table
+  const employeeSql = `SELECT * FROM employee`;
 
-    //retrieves all employees from the employee table
-    const employeeSql = `SELECT * FROM employee`;
-  
-    connection.promise().query(employeeSql, (err, data) => {
-      if (err) throw err;
-  
-      const employees = data.map(({ id, first_name, last_name }) => ({
-        name: first_name + " " + last_name,
-        value: id,
-      }));
-  
-      inquirer
-        .prompt([
-          {
-            type: "list",
-            name: "name",
-            message: "Which employee would you like to update?",
-            choices: employees,
-          },
-        ])
-        .then((empchoice) => {
-          const employee = empchoice.name;
-          const params = [];
-          params.push(employee);
-  
-          const managerSql = `SELECT * FROM employee`;
-  
-          connection.promise().query(managerSql, (err, data) => {
-            if (err) throw err;
-  
-            const managers = data.map(({ id, first_name, last_name }) => ({
-              name: first_name + " " + last_name,
-              value: id,
-            }));
-  
-            inquirer
-              .prompt([
-                {
-                  type: "list",
-                  name: "manager",
-                  message: "Who is the employee's manager?",
-                  choices: managers,
-                },
-              ])
-              .then((managerChoice) => {
-                const manager = managerChoice.manager;
-                params.push(manager);
-  
-                let employee = params[0];
-                params[0] = manager;
-                params[1] = employee;
-  
-                const sql = `UPDATE employee SET manager_id = ? WHERE id = ?`;
-  
-                connection.query(sql, params, (err, result) => {
-                  if (err) throw err;
-                  console.log("Employee has been updated!");
-  
-                  showEmployees();
-                });
+  connection.promise().query(employeeSql, (err, data) => {
+    if (err) throw err;
+
+    const employees = data.map(({ id, first_name, last_name }) => ({
+      name: first_name + " " + last_name,
+      value: id,
+    }));
+
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "name",
+          message: "Which employee would you like to update?",
+          choices: employees,
+        },
+      ])
+      .then((empchoice) => {
+        const employee = empchoice.name;
+        const params = [];
+        params.push(employee);
+
+        const managerSql = `SELECT * FROM employee`;
+
+        connection.promise().query(managerSql, (err, data) => {
+          if (err) throw err;
+
+          const managers = data.map(({ id, first_name, last_name }) => ({
+            name: first_name + " " + last_name,
+            value: id,
+          }));
+
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "manager",
+                message: "Who is the employee's manager?",
+                choices: managers,
+              },
+            ])
+            .then((managerChoice) => {
+              const manager = managerChoice.manager;
+              params.push(manager);
+
+              let employee = params[0];
+              params[0] = manager;
+              params[1] = employee;
+
+              const sql = `UPDATE employee SET manager_id = ? WHERE id = ?`;
+
+              connection.query(sql, params, (err, result) => {
+                if (err) throw err;
+                console.log("Employee has been updated!");
+
+                showEmployees();
               });
-          });
+            });
         });
-    });
-  };
-  
-  //function displays employees by department
+      });
+  });
+};
 
-  employeeDepartment = () => {
-      console.log('Showing employee by departments...\n');
-      const sql = `SELECT employee.first_name,
+//function displays employees by department
+
+employeeDepartment = () => {
+  console.log("Showing employee by departments...\n");
+  const sql = `SELECT employee.first_name,
                           employee.last_name,
                           department.name AS department
                     
@@ -500,9 +498,42 @@ updateManager = () => {
                     LEFT JOIN role ON employee.role_id = role.id
                     LEFT JOIN department ON role.department_id = department.id`;
 
-        connection.promise().query(sql, (err, rows) => {
-            if (err) throw err;
-            console.table(rows);
-            beginPrompt();
+  connection.promise().query(sql, (err, rows) => {
+    if (err) throw err;
+    console.table(rows);
+    beginPrompt();
+  });
+};
+
+//function deletes a department
+
+deleteDepartment = () => {
+  const deptSql = `SELECT * FROM department`;
+
+  connection.promise().query(deptSql, (err, data) => {
+    if (err) throw err;
+
+    const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "dept",
+          message: "What department do you want to delete?",
+          choices: dept,
+        },
+      ])
+      .then((deptChoice) => {
+        const dept = deptChoice.dept;
+        const sql = `DELETE FROM department WHERE id = ?`;
+
+        connection.query(sql, dept, (err, result) => {
+          if (err) throw err;
+          console.log("Successfully deleted!");
+
+          showDepartments();
         });
-  };
+      });
+  });
+};
