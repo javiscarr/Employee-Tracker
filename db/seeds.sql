@@ -22,7 +22,7 @@ VALUES
 ('Mildred', 'Ellis', 4, 3),
 ('Tara', 'Turner', null, 1),
 ('Javis', 'Carr', 2, null),
-('Kwiince', 'Lipscomb', 7, 2),
-('Rashod', 'Dumas', 6, null),
-('Bobby', 'Turner', 5, 2),
+('Kwiince', 'Lipscomb', 3, 2),
+('Rashod', 'Dumas', 1, null),
+('Bobby', 'Turner', 1, 2),
 ('Kody', 'Ellis', null, 4);
