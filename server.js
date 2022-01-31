@@ -4,10 +4,7 @@ const mysql = require("mysql2");
 const inquirer = require("inquirer");
 //importing console.table
 const conTable = require("console.table");
-const { connect } = require("http2");
-const { query } = require("express");
-const { resolvePtr } = require("dns");
-const { title } = require("process");
+
 
 require("dotenv").config();
 
@@ -15,7 +12,7 @@ require("dotenv").config();
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: process.env.MYSQL_PASSWORD,
+  password: process.env.DB_PASSWORD,
   database: "employee_db",
 });
 
@@ -547,7 +544,7 @@ deleteRole = () => {
     connection.promise().query(roleSql, (err, data) => {
         if (err) throw err; 
 
-        const role = data.map(({ title, id }) = ({ name: title, value: id }));
+        const role = data.map(({ title, id }) => ({ name: title, value: id }));
 
         inquirer.prompt([
             {
