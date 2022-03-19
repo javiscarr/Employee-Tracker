@@ -42,3 +42,11 @@ This application is a `content management systems` interface that allows users w
 _Given the user has installed the necessary packages, the user would enter `npm start` in the command line to prompt the application to begin_
 
 ![blast off](https://media.giphy.com/media/PqjTdvXImZQfcmTYEO/giphy.gif)
+
+# Author
+
+## **_Javis Carr_**
+
+### **Email:** Javis.Carr@gmail.com
+
+### **LinkedIn:** [Click here](https://www.linkedin.com/in/javis-carr-8a584533/)
